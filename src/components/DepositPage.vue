@@ -137,7 +137,8 @@ const handleSubmit = async () => {
       body: JSON.stringify({
         amount: parseFloat(formData.value.amount),
         paymentMethod: formData.value.paymentMethod
-      })
+      }),
+      credentials: 'include',
     })
 
     if (!response.ok) {

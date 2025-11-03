@@ -22,3 +22,6 @@ dist-ssr
 *.sln
 *.sw?
 .claude/
+
+# SSL certificates
+*.pem
