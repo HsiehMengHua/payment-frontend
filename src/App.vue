@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import RegisterPage from './components/RegisterPage.vue'
 </script>
 
 <template>
   <v-app>
-    <RegisterPage />
+    <router-view />
   </v-app>
 </template>
