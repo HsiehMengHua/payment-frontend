@@ -76,14 +76,24 @@
 
             <v-divider class="my-4"></v-divider>
 
-            <v-btn
-              variant="text"
-              color="primary"
-              block
-              @click="$router.push('/deposit')"
-            >
-              Go to Deposit
-            </v-btn>
+            <div class="d-flex flex-column ga-2">
+              <v-btn
+                variant="text"
+                color="primary"
+                block
+                @click="$router.push('/login')"
+              >
+                Go to Login
+              </v-btn>
+              <v-btn
+                variant="text"
+                color="primary"
+                block
+                @click="$router.push('/deposit')"
+              >
+                Go to Deposit
+              </v-btn>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>

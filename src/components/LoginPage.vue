@@ -4,32 +4,31 @@
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card elevation="8">
           <v-card-title class="text-h5 text-center py-6 bg-primary">
-            Deposit
+            Login
           </v-card-title>
 
           <v-card-text class="px-8 py-6">
             <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
               <v-text-field
-                v-model="formData.amount"
-                label="Amount"
-                :rules="[rules.required, rules.positiveNumber]"
-                type="number"
+                v-model="formData.username"
+                label="Username"
+                :rules="[rules.required]"
                 variant="outlined"
-                prepend-inner-icon="mdi-currency-usd"
+                prepend-inner-icon="mdi-account"
                 class="mb-2"
                 required
               ></v-text-field>
 
-              <v-select
-                v-model="formData.paymentMethod"
-                label="Payment Method"
+              <v-text-field
+                v-model="formData.password"
+                label="Password"
                 :rules="[rules.required]"
-                :items="paymentMethods"
+                type="password"
                 variant="outlined"
-                prepend-inner-icon="mdi-credit-card"
+                prepend-inner-icon="mdi-lock"
                 class="mb-4"
                 required
-              ></v-select>
+              ></v-text-field>
 
               <v-btn
                 type="submit"
@@ -39,7 +38,7 @@
                 :loading="loading"
                 :disabled="!valid"
               >
-                Deposit
+                Login
               </v-btn>
             </v-form>
 
@@ -72,17 +71,17 @@
                 variant="text"
                 color="primary"
                 block
-                @click="$router.push('/login')"
+                @click="$router.push('/register')"
               >
-                Go to Login
+                Go to Register
               </v-btn>
               <v-btn
                 variant="text"
                 color="primary"
                 block
-                @click="$router.push('/register')"
+                @click="$router.push('/deposit')"
               >
-                Go to Register
+                Go to Deposit
               </v-btn>
             </div>
           </v-card-text>
@@ -101,24 +100,12 @@ const errorMessage = ref('')
 const successMessage = ref('')
 
 const formData = ref({
-  amount: '',
-  paymentMethod: ''
+  username: '',
+  password: ''
 })
 
-const paymentMethods = [
-  'Credit Card',
-  'Debit Card',
-  'Bank Transfer',
-  'PayPal',
-  'Cryptocurrency'
-]
-
 const rules = {
-  required: (value: string) => !!value || 'This field is required',
-  positiveNumber: (value: string) => {
-    const num = parseFloat(value)
-    return (!isNaN(num) && num > 0) || 'Amount must be a positive number'
-  }
+  required: (value: string) => !!value || 'This field is required'
 }
 
 const handleSubmit = async () => {
@@ -129,31 +116,23 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/deposit`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        amount: parseFloat(formData.value.amount),
-        paymentMethod: formData.value.paymentMethod
-      })
+      body: JSON.stringify(formData.value)
     })
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.message || `Deposit failed: ${response.status}`)
+      throw new Error(errorData.message || `Login failed: ${response.status}`)
     }
 
-    successMessage.value = 'Deposit successful!'
-
-    // Reset form
-    formData.value = {
-      amount: '',
-      paymentMethod: ''
-    }
+    successMessage.value = 'Login successful!'
+    window.location.href = '/deposit'
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'An error occurred during deposit'
+    errorMessage.value = error instanceof Error ? error.message : 'An error occurred during login'
   } finally {
     loading.value = false
   }
