@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 interface User {
   username: string
@@ -40,9 +40,12 @@ interface User {
 const loading = ref(false)
 const error = ref('')
 const user = ref<User | null>(null)
+let intervalId: number | null = null
 
-const fetchUserData = async () => {
-  loading.value = true
+const fetchUserData = async (showLoading = true) => {
+  if (showLoading) {
+    loading.value = true
+  }
   error.value = ''
 
   try {
@@ -60,7 +63,9 @@ const fetchUserData = async () => {
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load user information'
   } finally {
-    loading.value = false
+    if (showLoading) {
+      loading.value = false
+    }
   }
 }
 
@@ -72,6 +77,19 @@ const formatBalance = (balance: number): string => {
 }
 
 onMounted(() => {
-  fetchUserData()
+  // Initial fetch with loading indicator
+  fetchUserData(true)
+
+  // Set up polling every 5 seconds (without loading indicator)
+  intervalId = window.setInterval(() => {
+    fetchUserData(false)
+  }, 5000)
+})
+
+onUnmounted(() => {
+  // Clean up interval when component is destroyed
+  if (intervalId !== null) {
+    clearInterval(intervalId)
+  }
 })
 </script>
