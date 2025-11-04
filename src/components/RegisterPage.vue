@@ -160,11 +160,33 @@ const handleSubmit = async () => {
     }
 
     successMessage.value = 'Registration successful!'
-    router.push({ name: 'deposit' })
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during registration'
-  } finally {
-    loading.value = false
+  }
+  
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/user/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include', 
+      body: JSON.stringify({
+        username: formData.value.username,
+        password: formData.value.password,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.message || `Login failed: ${response.status}`)
+    }
+
+    setTimeout(() => {
+      router.push({ name: 'deposit' })
+    }, 1000)
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'An error occurred during login'
   }
 }
 </script>
