@@ -114,11 +114,7 @@ const formData = ref({
 })
 
 const paymentMethods = [
-  'Credit Card',
-  'Debit Card',
-  'Bank Transfer',
-  'PayPal',
-  'Cryptocurrency'
+  'FakePay'
 ]
 
 const rules = {
@@ -147,7 +143,7 @@ const handleSubmit = async () => {
       body: JSON.stringify({
         uuid,
         amount: parseFloat(formData.value.amount),
-        paymentMethod: formData.value.paymentMethod
+        "payment_method": formData.value.paymentMethod
       }),
       credentials: 'include',
     })
@@ -157,7 +153,13 @@ const handleSubmit = async () => {
       throw new Error(errorData.message || `Deposit failed: ${response.status}`)
     }
 
+    const data = await response.json()
     successMessage.value = 'Deposit successful!'
+
+    setTimeout(() => {
+      window.open(data.redirect_url, '_blank')
+      loading.value = false
+    }, 1000)
 
     // Reset form
     formData.value = {
@@ -166,7 +168,6 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during deposit'
-  } finally {
     loading.value = false
   }
 }
