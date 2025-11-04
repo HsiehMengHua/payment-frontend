@@ -107,6 +107,7 @@ const valid = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+const uuid = crypto.randomUUID()
 
 const formData = ref({
   amount: '',
@@ -133,8 +134,6 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   try {
-    const uuid = crypto.randomUUID()
-
     const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/deposit`, {
       method: 'POST',
       headers: {

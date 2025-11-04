@@ -158,6 +158,7 @@ const loadingBankAccounts = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 const bankAccounts = ref<any[]>([])
+const uuid = crypto.randomUUID()
 
 const formData = ref({
   amount: '',
@@ -205,7 +206,6 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   try {
-    const uuid = crypto.randomUUID()
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/withdraw`, {
       method: 'POST',
