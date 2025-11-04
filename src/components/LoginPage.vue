@@ -91,6 +91,14 @@
               >
                 Go to Withdraw
               </v-btn>
+              <v-btn
+                variant="text"
+                color="primary"
+                block
+                @click="$router.push('/transfer')"
+              >
+                Go to Transfer
+              </v-btn>
             </div>
           </v-card-text>
         </v-card>

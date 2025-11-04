@@ -4,11 +4,21 @@
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card elevation="8">
           <v-card-title class="text-h5 text-center py-6 bg-primary">
-            Deposit
+            Transfer
           </v-card-title>
 
           <v-card-text class="px-8 py-6">
             <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
+              <v-text-field
+                v-model="formData.recipientUsername"
+                label="Recipient Username"
+                :rules="[rules.required]"
+                variant="outlined"
+                prepend-inner-icon="mdi-account"
+                class="mb-2"
+                required
+              ></v-text-field>
+
               <v-text-field
                 v-model="formData.amount"
                 label="Amount"
@@ -16,20 +26,9 @@
                 type="number"
                 variant="outlined"
                 prepend-inner-icon="mdi-currency-usd"
-                class="mb-2"
-                required
-              ></v-text-field>
-
-              <v-select
-                v-model="formData.paymentMethod"
-                label="Payment Method"
-                :rules="[rules.required]"
-                :items="paymentMethods"
-                variant="outlined"
-                prepend-inner-icon="mdi-credit-card"
                 class="mb-4"
                 required
-              ></v-select>
+              ></v-text-field>
 
               <v-btn
                 type="submit"
@@ -39,7 +38,7 @@
                 :loading="loading"
                 :disabled="!valid"
               >
-                Deposit
+                Transfer
               </v-btn>
             </v-form>
 
@@ -88,17 +87,17 @@
                 variant="text"
                 color="primary"
                 block
-                @click="$router.push('/withdraw')"
+                @click="$router.push('/deposit')"
               >
-                Go to Withdraw
+                Go to Deposit
               </v-btn>
               <v-btn
                 variant="text"
                 color="primary"
                 block
-                @click="$router.push('/transfer')"
+                @click="$router.push('/withdraw')"
               >
-                Go to Transfer
+                Go to Withdraw
               </v-btn>
             </div>
           </v-card-text>
@@ -115,16 +114,11 @@ const valid = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
-const uuid = crypto.randomUUID()
 
 const formData = ref({
-  amount: '',
-  paymentMethod: ''
+  recipientUsername: '',
+  amount: ''
 })
-
-const paymentMethods = [
-  'FakePay'
-]
 
 const rules = {
   required: (value: string) => !!value || 'This field is required',
@@ -142,33 +136,30 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/deposit`, {
+    const uuid = crypto.randomUUID()
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/transfer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         uuid,
-        amount: parseFloat(formData.value.amount),
-        payment_method: formData.value.paymentMethod
+        recipient_username: formData.value.recipientUsername,
+        amount: parseFloat(formData.value.amount)
       }),
       credentials: 'include',
     })
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.message || `Deposit failed: ${response.status}`)
+      throw new Error(errorData.message || `Transfer failed: ${response.status}`)
     }
 
-    const data = await response.json()
-    successMessage.value = 'Deposit successful!'
-
-    setTimeout(() => {
-      window.open(data.redirect_url, '_blank')
-      loading.value = false
-    }, 1000)
+    successMessage.value = 'Transfer successful!'
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'An error occurred during deposit'
+    errorMessage.value = error instanceof Error ? error.message : 'An error occurred during transfer'
+  } finally {
     loading.value = false
   }
 }

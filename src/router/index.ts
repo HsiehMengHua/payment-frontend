@@ -3,6 +3,7 @@ import RegisterPage from '../components/RegisterPage.vue'
 import DepositPage from '../components/DepositPage.vue'
 import LoginPage from '../components/LoginPage.vue'
 import WithdrawPage from '../components/WithdrawPage.vue'
+import TransferPage from '../components/TransferPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -30,6 +31,11 @@ const router = createRouter({
       path: '/withdraw',
       name: 'withdraw',
       component: WithdrawPage
+    },
+    {
+      path: '/transfer',
+      name: 'transfer',
+      component: TransferPage
     }
   ]
 })
