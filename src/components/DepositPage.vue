@@ -84,6 +84,14 @@
               >
                 Go to Register
               </v-btn>
+              <v-btn
+                variant="text"
+                color="primary"
+                block
+                @click="$router.push('/withdraw')"
+              >
+                Go to Withdraw
+              </v-btn>
             </div>
           </v-card-text>
         </v-card>
@@ -129,12 +137,15 @@ const handleSubmit = async () => {
   successMessage.value = ''
 
   try {
+    const uuid = crypto.randomUUID()
+
     const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/deposit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        uuid,
         amount: parseFloat(formData.value.amount),
         paymentMethod: formData.value.paymentMethod
       }),

@@ -83,6 +83,14 @@
               >
                 Go to Deposit
               </v-btn>
+              <v-btn
+                variant="text"
+                color="primary"
+                block
+                @click="$router.push('/withdraw')"
+              >
+                Go to Withdraw
+              </v-btn>
             </div>
           </v-card-text>
         </v-card>
@@ -93,7 +101,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const valid = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
@@ -131,7 +141,7 @@ const handleSubmit = async () => {
     }
 
     successMessage.value = 'Login successful!'
-    window.location.href = '/deposit'
+    router.push({ name: 'deposit' })
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during login'
   } finally {
