@@ -38,16 +38,16 @@
                 >
                   <v-card
                     v-for="account in bankAccounts"
-                    :key="account.id"
+                    :key="account.ID"
                     class="mb-3 bank-account-card"
-                    :class="{ 'selected-card': formData.bankAccount === account.id }"
-                    @click="formData.bankAccount = account.id"
+                    :class="{ 'selected-card': formData.bankAccount === account.ID }"
+                    @click="formData.bankAccount = account.ID"
                     variant="outlined"
                   >
                     <v-card-text class="pa-4">
                       <div class="d-flex align-start">
                         <v-radio
-                          :value="account.id"
+                          :value="account.ID"
                           hide-details
                           class="mt-0 pt-0"
                         ></v-radio>
@@ -215,7 +215,8 @@ const handleSubmit = async () => {
       body: JSON.stringify({
         uuid,
         amount: parseFloat(formData.value.amount),
-        bank_account_id: formData.value.bankAccount
+        payment_method: 'BankTransfer',
+        bank_account_id: formData.value.bankAccount,
       }),
       credentials: 'include',
     })
@@ -227,11 +228,16 @@ const handleSubmit = async () => {
 
     successMessage.value = 'Withdraw successful!'
 
-    // Reset form
-    formData.value = {
-      amount: '',
-      bankAccount: ''
-    }
+    setTimeout(() => {
+      const selectedAccount = bankAccounts.value.find(acc => acc.ID === formData.value.bankAccount)
+      const bankCode = selectedAccount?.BankCode || ''
+      const accountNumber = selectedAccount?.AccountNumber || ''
+      const confirmURL = `${import.meta.env.VITE_API_URL}/payments/confirm`
+      const cancelURL = `${import.meta.env.VITE_API_URL}/payments/cancel`
+      const simulatorURL = `${import.meta.env.VITE_FAKE_PSP_URL}/payout/${uuid}?amount=${formData.value.amount}&bank_code=${bankCode}&account_number=${accountNumber}&confirm_callback=${confirmURL}&cancel_callback=${cancelURL}`
+      window.open(simulatorURL, '_blank')
+      loading.value = false
+    }, 1000)
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during withdraw'
   } finally {

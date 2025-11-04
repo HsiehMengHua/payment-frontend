@@ -143,7 +143,7 @@ const handleSubmit = async () => {
       body: JSON.stringify({
         uuid,
         amount: parseFloat(formData.value.amount),
-        "payment_method": formData.value.paymentMethod
+        payment_method: formData.value.paymentMethod
       }),
       credentials: 'include',
     })
@@ -160,12 +160,6 @@ const handleSubmit = async () => {
       window.open(data.redirect_url, '_blank')
       loading.value = false
     }, 1000)
-
-    // Reset form
-    formData.value = {
-      amount: '',
-      paymentMethod: ''
-    }
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during deposit'
     loading.value = false

@@ -111,7 +111,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const valid = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
@@ -150,13 +152,7 @@ const handleSubmit = async () => {
     }
 
     successMessage.value = 'Registration successful!'
-
-    // Reset form
-    formData.value = {
-      username: '',
-      password: '',
-      name: ''
-    }
+    router.push({ name: 'deposit' })
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during registration'
   } finally {
