@@ -2,6 +2,8 @@
   <v-container class="fill-height">
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6" lg="4">
+        <UserHeader />
+
         <v-card elevation="8">
           <v-card-title class="text-h5 text-center py-6 bg-primary">
             Deposit
@@ -110,6 +112,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import UserHeader from './UserHeader.vue'
 
 const valid = ref(false)
 const loading = ref(false)
