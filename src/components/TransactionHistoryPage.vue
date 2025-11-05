@@ -66,37 +66,6 @@
             </v-data-table>
           </v-card-text>
         </v-card>
-
-        <v-card class="mt-4" elevation="2">
-          <v-card-text>
-            <div class="d-flex flex-column ga-2">
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/deposit')"
-              >
-                Go to Deposit
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/withdraw')"
-              >
-                Go to Withdraw
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/transfer')"
-              >
-                Go to Transfer
-              </v-btn>
-            </div>
-          </v-card-text>
-        </v-card>
       </v-col>
     </v-row>
   </v-container>

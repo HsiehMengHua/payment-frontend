@@ -66,51 +66,6 @@
             >
               {{ successMessage }}
             </v-alert>
-
-            <v-divider class="my-4"></v-divider>
-
-            <div class="d-flex flex-column ga-2">
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/login')"
-              >
-                Go to Login
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/register')"
-              >
-                Go to Register
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/withdraw')"
-              >
-                Go to Withdraw
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/transfer')"
-              >
-                Go to Transfer
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary"
-                block
-                @click="$router.push('/history')"
-              >
-                Transaction History
-              </v-btn>
-            </div>
           </v-card-text>
         </v-card>
       </v-col>
