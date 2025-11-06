@@ -81,7 +81,7 @@ const valid = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
-const uuid = crypto.randomUUID()
+let uuid = crypto.randomUUID()
 
 const formData = ref({
   amount: '',
@@ -127,15 +127,20 @@ const handleSubmit = async () => {
     }
 
     const data = await response.json()
-    successMessage.value = 'Deposit successful!'
-
-    setTimeout(() => {
-      window.open(data.redirect_url, '_blank')
-      loading.value = false
-    }, 1000)
+    
+    if (data.redirect_url) {
+      setTimeout(() => {
+        window.open(data.redirect_url, '_blank')
+      }, 1000)
+    } else {
+      successMessage.value = 'Deposit request initiated'
+    }
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'An error occurred during deposit'
     loading.value = false
+  } finally {
+    loading.value = false
+    uuid = crypto.randomUUID()
   }
 }
 </script>
